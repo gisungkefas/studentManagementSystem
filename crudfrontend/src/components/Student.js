@@ -38,6 +38,19 @@ export default function Student() {
         })
     }
 
+    const reset = (e) => {
+        e.preventDefault();
+        setStudents({
+            firstName:"",
+            lastName:"",
+            email:"",
+            gender:"",
+            dob:"",
+            phoneNumber:"",
+            address:""
+        });
+    };
+
     useEffect(()=>{
         fetch("http://localhost:8080/api/v1/student/getAll")
             .then(res=>res.json())
@@ -82,7 +95,8 @@ export default function Student() {
                                value={address}
                                onChange={(e)=>setAddress(e.target.value)}
                     />
-                    <Button variant="contained" color="secondary" onClick={handleClick}> Submit </Button>
+                    <Button variant="contained" color="primary" onClick={handleClick}> Submit </Button>
+                    <Button variant="contained" color="secondary" onClick={reset}> Clear </Button>
                 </form>
 
             </Paper>
