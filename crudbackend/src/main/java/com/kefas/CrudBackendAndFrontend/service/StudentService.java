@@ -8,5 +8,11 @@ public interface StudentService {
 
     StudentDto createStudent(StudentDto studentDto);
 
+    StudentDto editStudent(StudentDto studentDto, Long studentId);
+
+    String deleteStudent(Long studentId);
+
+    Student getStudentById(Long studentId);
+
     List<Student> getAllStudent();
 }

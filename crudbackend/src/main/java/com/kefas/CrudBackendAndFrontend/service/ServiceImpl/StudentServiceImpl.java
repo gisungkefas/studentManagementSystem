@@ -2,6 +2,7 @@ package com.kefas.CrudBackendAndFrontend.service.ServiceImpl;
 
 import com.kefas.CrudBackendAndFrontend.entities.Student;
 import com.kefas.CrudBackendAndFrontend.exception.StudentAlreadyExistException;
+import com.kefas.CrudBackendAndFrontend.exception.StudentNotFoundException;
 import com.kefas.CrudBackendAndFrontend.repository.StudentRepository;
 import com.kefas.CrudBackendAndFrontend.service.StudentService;
 import com.kefas.CrudBackendAndFrontend.studentDto.StudentDto;
@@ -41,5 +42,60 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public List<Student> getAllStudent() {
         return studentRepository.findAll();
+    }
+
+    @Override
+    public StudentDto editStudent(StudentDto studentDto, Long studentId) {
+        Student student= studentRepository.findById(studentId).
+                orElseThrow(()-> new StudentNotFoundException("User with ID: "+ studentId +" is not found"));
+
+        if(studentDto.getEmail() != null && !studentDto.getEmail().equals(student.getEmail())){
+            student.setEmail(studentDto.getEmail());
+        }
+
+        if(studentDto.getFirstName() != null && !studentDto.getFirstName().equals(student.getFirstName())){
+            student.setFirstName(studentDto.getFirstName());
+        }
+
+        if (studentDto.getLastName() != null && !studentDto.getLastName().equals(student.getLastName())){
+            student.setLastName(studentDto.getLastName());
+        }
+
+        if (studentDto.getGender() != null && !studentDto.getGender().equals(student.getGender())){
+            student.setGender(studentDto.getGender());
+        }
+
+        if (studentDto.getDob() != null && !studentDto.getDob().equals(student.getDob())){
+            student.setDob(studentDto.getDob());
+        }
+
+        if (studentDto.getPhoneNumber() != null && !studentDto.getPhoneNumber().equals(student.getPhoneNumber())){
+            student.setPhoneNumber(studentDto.getPhoneNumber());
+        }
+
+        if (studentDto.getAddress() != null && !studentDto.getAddress().equals(student.getAddress())){
+            student.setAddress(studentDto.getAddress());
+        }
+
+        studentRepository.save(student);
+
+        return studentDto;
+    }
+
+    @Override
+    public String deleteStudent(Long studentId) {
+        Student student = studentRepository.findById(studentId).
+                orElseThrow(()-> new StudentNotFoundException("User with ID: "+ studentId +" is not found"));
+
+        studentRepository.delete(student);
+        return "User Deleted Successfully";
+    }
+
+    @Override
+    public Student getStudentById(Long studentId) {
+        return studentRepository.findById(studentId)
+                .orElseThrow(() -> {
+                    throw new StudentNotFoundException("User with ID: " + studentId + " Not Found");
+                });
     }
 }
